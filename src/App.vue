@@ -1,59 +1,49 @@
 <script setup>
 import { computed, ref } from 'vue';
-//import RollDice from './components/RollDice.vue'
+import RollDice from './components/RollDice.vue';
 
-let throwCount = ref('6')
+const diceRolled = ref([1, 2, 3, 4, 5, 6]);
 
-let diceRolled = ref([]);
-
-const rollDice = () =>{
-    diceRolled.value = [];    
-for (let index = 0; index < throwCount.value; index++) {
-  const randomNumber = Math.ceil(Math.random() * 6);
-                      diceRolled.value.push(randomNumber);}
+const updateDiceRolled = (diceValues) => {
+  diceRolled.value = (diceValues)
 }
 
-const computedDiceCount = computed(() => { const diceCount = {
-  1 : 0,
-  2 : 0,
-  3 : 0,
-  4 : 0,
-  5 : 0,
-  6 : 0,
-};
-diceRolled.value.forEach(value => diceCount[value]++);
-return diceCount;
+const computedDiceCount = computed(() => { 
+  const diceCount = {
+    1 : 0,
+    2 : 0,
+    3 : 0,
+    4 : 0,
+    5 : 0,
+    6 : 0,
+  };
+
+  diceRolled.value.forEach(value => diceCount[value]++);
+
+  return diceCount;
 })
- /*                 
-let computedDiceCount = computed(() => {
-  for (let index = 0; index < diceRolled.value.length; index++) {
-  diceCount[diceRolled.value[index]] ++;
-  }
-})
-let diceCount = {
-  1: 0,
-  2: 0,
-  3: 0,
-  4: 0,
-  5: 0,
-  6: 0,
-};
-  */
+ 
 </script>
 
 <template>
+ 
   <div>
-   <input type="number" v-model="throwCount"><br>
-   <button @click="rollDice">Throw</button>
-
+    <RollDice @throw="updateDiceRolled" />
    <br>
-    <p>{{ diceRolled }}</p>
-    <ul>
-      <li v-for="(value, key, index) in computedDiceCount">
-      {{ key }} : {{ value }}
-      </li>
+    <table>
+      <thead>
+        <tr>
+        <td>Getal</td><td>aantal</td>
+      </tr>
+    </thead>
+      <tbody  v-for="(value, key) in computedDiceCount" class="dice">
+        <tr>
+          <td class="dice">{{ key }}</td><td class="dice">{{ value }}</td>
+        </tr>
+      </tbody>
       
-    </ul>
+    </table>
+    <br>
     <table>
     <thead>
       <tr>
@@ -74,5 +64,30 @@ let diceCount = {
 </template>
 
 <style scoped>
+table {
+  margin-inline: auto;
+  border-collapse: collapse;
+  width: 200px;
+  border: 1px solid black;
+ }
 
+thead {
+  border: 2px solid black;
+  text-align: center;
+  }
+
+tbody {
+  border: 1px solid black;
+  padding:  top 5px right 15px;
+  text-align: left;
+}
+
+td { 
+  border: 1px solid black;
+}
+
+.dice {
+  border: 1px solid black;
+  text-align: right;  
+}
 </style>
